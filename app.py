@@ -1,39 +1,29 @@
-import mysql.connector 
 import streamlit as st 
+from db_c import conn,cursor
+st.title("Media Platform")
 
-conn=mysql.connector.connect(
-    host=st.secrets["Host_Name"],
-    user=st.secrets["user"],
-    database=st.secrets["database"],
-    password=st.secrets["password"],
-    port=st.secrets["port"]
+login,signup = st.tabs(
+    ["Login","SignUp"]
 )
 
-cursor=conn.cursor(dictionary=True) # 
 
-# USERS TABLE
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS users(
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(100),
-    email VARCHAR(100) UNIQUE,
-    password VARCHAR(100)
-)
-""")
+with login:
+    st.header("Login")
+    with st.form("Login_Form"):
+        email = st.text_input("Email")
+        password = st.text_input("Password",type="password")
+        btn=st.form_submit_button("Login")
 
-# FILES TABLE
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS files(
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    user_id INT,
-    file_name VARCHAR(255),
-    file_type VARCHAR(100),
-    file_url TEXT,
-    upload_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY(user_id) REFERENCES users(id)
-)
-""")
 
-conn.commit()
+with signup:
+    st.header("SignUp")
 
-print("Tables Created Successfully")
+    with st.form("SignUp_Form"):
+
+        name = st.text_input("Name")
+        email = st.text_input("Email")
+        password = st.text_input("Password", type="password")
+
+        btn = st.form_submit_button("SignUp")
+
+        
